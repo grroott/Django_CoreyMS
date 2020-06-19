@@ -11,16 +11,6 @@
             <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
             <p class="article-content">{{ post.content |truncatewords:"50" }}</p>
             <a href="{% url 'post-detail' post.id %}"><u>See post</u></a>
-            <form action="{% url 'like-post' %}" method="POST">
-              {% csrf_token %}
-              <input type="hidden" name="post_id" value="{{ post.id }}">
-              {% if user not in post.liked.all %}
-                <button class="btn btn-outline-info mb-4" type="submit">Like</button>
-              {% else %}
-                <button class="btn btn-info mb-4" type="submit">Unlike</button>
-              {% endif %}
-            </form>
-            <strong> {{ post.liked.all.count }} Likes</strong>
           </div>
         </article>
     {% endfor %}
