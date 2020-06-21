@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Like
 from django.http import HttpResponseRedirect
-
+from django.contrib import messages
 	
 def home(request):
 	context = {
@@ -70,6 +70,11 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 		if self.request.user == post.author:
 			return True
 		return False
+
+	def delete(self, request, *args, **kwargs):
+	    response = super().delete(request, *args, **kwargs)
+	    messages.success(self.request, 'Your post has been deleted sucessfully!')
+	    return response
 		
 
 def about(request):
