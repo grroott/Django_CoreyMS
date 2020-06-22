@@ -48,9 +48,10 @@ class PostCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 		form.instance.author = self.request.user
 		return super().form_valid(form)
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
 	model = Post
 	fields = ['title', 'content']
+	success_message = "Your post has been updated sucessfully!"
 
 	def form_valid(self, form):
 		form.instance.author = self.request.user
