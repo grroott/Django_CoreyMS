@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from users.models import Profile
 from django.db.models import Count, Sum, Q
-from django.core.paginator import Paginator
+from django import template
 
 	
 def home(request):
@@ -128,4 +128,12 @@ def search(request):
 	'results' : results,
 	'search_word' : query
 	}
+
+	register = template.Library()
+
 	return render(request, 'blog/search.html', context)
+
+
+
+    
+
