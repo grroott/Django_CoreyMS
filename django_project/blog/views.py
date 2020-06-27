@@ -121,16 +121,13 @@ def search(request):
 	query = request.GET.get('user_search_input')
 
 	if query:
-		results = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
+		results = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).order_by('-date_posted')
 	else:
 		return HttpResponse("Access denied")
 	context={
 	'results' : results,
 	'search_word' : query
 	}
-
-	register = template.Library()
-
 	return render(request, 'blog/search.html', context)
 
 
