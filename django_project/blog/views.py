@@ -8,7 +8,7 @@ from .models import Post, Like
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from users.models import Profile
-from django.db.models import Count, Sum, Q
+from django.db.models import Count, Sum, Q, Min, Max, Avg
 from django import template
 
 	
@@ -130,7 +130,13 @@ def search(request):
 	}
 	return render(request, 'blog/search.html', context)
 
-
-
-    
+def most_liked_posts(request):
+	query = Like.objects.values('post_id').order_by().annotate(like_count=Count('post_id'))
+	maxval = sorted(query, key=lambda x:x['like_count'], reverse=True)[:5]
+	posts = Post.objects.all()
+	context={
+	'maxval':maxval,
+	'posts': posts
+	}
+	return render(request, 'blog/most_liked_posts.html', context)
 
