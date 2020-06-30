@@ -131,7 +131,7 @@ def search(request):
 	return render(request, 'blog/search.html', context)
 
 def most_liked_posts(request):
-	query = Like.objects.values('post_id').order_by().annotate(like_count=Count('post_id'))
+	query = Like.objects.filter(value='Like').values('value', 'post_id').order_by().annotate(like_count=Count('post_id'))
 	maxval = sorted(query, key=lambda x:x['like_count'], reverse=True)[:5]
 	posts = Post.objects.all()
 	context={
