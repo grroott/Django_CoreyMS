@@ -69,7 +69,9 @@
 	        </article>
 	{% endfor %}
 {% else %}
-<h3 class="mb-3">You don't have any posts!</h3>
+<h3 class="mb-3">You don't have any posts! 
+	<a href="{% url 'post-create' %}">Post it here !</a>
+</h3>
 {% endif %}
    
 {% endblock content %}
