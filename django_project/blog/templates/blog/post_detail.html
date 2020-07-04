@@ -15,10 +15,10 @@
       </div>
       <h2 class="article-title">{{ object.title }}</h2>
       <p class="article-content">{{ object.content | safe }}</p>
-      {% if object.author != user %}
-        {% include 'blog/like_section.html' %}
-      {% endif %}
-      <div class="likes-count">
+      <div class="like-section">
+        {% if object.author != user %}
+          {% include 'blog/like_section.html' %}
+        {% endif %}
         {% if post.liked.all.count == 0  %}
           <strong> <a href="#">
           {{ post.liked.all.count }} Like
