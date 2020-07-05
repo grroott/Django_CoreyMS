@@ -34,10 +34,8 @@
 
           {% if profile_likes == None %}
             <p>0 like</p>
-          {% elif profile_likes == 1 %}
-            <p>1 Like</p>
           {% else %}
-            <p>{{ profile_likes }} Likes</p>
+            <p>{{ profile_likes }} Like{{ profile_likes | pluralize }}</p>
           {% endif %}
 
           <p class="text-secondary"><em>{{ profile_info.bio }}</em></p>
