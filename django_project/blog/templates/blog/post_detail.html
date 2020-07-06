@@ -19,19 +19,18 @@
         {% if object.author != user %}
           {% include 'blog/like_section.html' %}
         {% endif %}
-        {% if post.liked.all.count == 0  %}
+        {% if object.liked.all.count == 0  %}
           <strong> <a href="#">
-          {{ post.liked.all.count }} Like
+          {{ object.liked.all.count }} Like
           </a></strong>
         {% else %}
-          <strong> <a href="{% url 'post-detail-likes' post.id%}">
-          {{ post.liked.all.count }} Like{{ post.liked.all.count | pluralize }}
+          <strong> <a href="{% url 'post-detail-likes' object.id%}">
+          {{ object.liked.all.count }} Like{{ object.liked.all.count | pluralize }}
           </a></strong>
         {% endif %}
       </div>
     </div>
   </article>
-
   {% if comments.count == None or comments.count == 0 %}
     <h3>0 Comment</h3> 
   {% else %}
@@ -53,4 +52,5 @@
     {% endfor %}
   </div>
   
+
 {% endblock content %}

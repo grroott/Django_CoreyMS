@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+from .forms import CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -10,12 +11,22 @@ from users.models import Profile
 from django.db.models import Count, Sum, Q, Min, Max, Avg
 from django import template
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
 	
-def home(request):
+@login_required
+def post_detail(request, pk):
 	context = {
-	'posts' : Post.objects.all()
+	'object' : Post.objects.get(id=pk),
+	'comments':Comment.objects.filter(post=pk).order_by('-date_posted')
 	}
-	return render(request, 'blog/home.html', context)
+	return render(request, 'blog/post_detail.html', context)
+
+@login_required
+def post_detail_likes(request, pk):
+	context = {
+	'object' : Post.objects.get(id=pk),
+	}
+	return render(request, 'blog/post_detail_likes.html', context)
 
 class PostListView(LoginRequiredMixin, ListView):
 	model = Post
@@ -44,19 +55,6 @@ class UserPostListView(LoginRequiredMixin, ListView):
         context['profile_info'] = Profile.objects.get(user=user)
         context['profile_likes'] = Post.objects.filter(author=user).annotate(like_count=Count('liked')).aggregate(total_likes=Sum('like_count'))['total_likes']
         return context
-
-
-class PostDetailView(LoginRequiredMixin, DetailView):
-	model = Post
-
-	def get_context_data(self, **kwargs):
-		context = super(PostDetailView, self).get_context_data(**kwargs)
-		# id = Post.objects.get
-		# post = get_object_or_404(Post)
-		# print(post)
-		context['comments'] = Comment.objects.filter(post=self.object).order_by('-date_posted')
-		return context
-		
 
 class PostCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 	model = Post
