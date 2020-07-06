@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Like
+from .models import Post, Like, Comment
 from django.contrib import messages
 from users.models import Profile
 from django.db.models import Count, Sum, Q, Min, Max, Avg
@@ -48,6 +48,14 @@ class UserPostListView(LoginRequiredMixin, ListView):
 
 class PostDetailView(LoginRequiredMixin, DetailView):
 	model = Post
+
+	def get_context_data(self, **kwargs):
+		context = super(PostDetailView, self).get_context_data(**kwargs)
+		# id = Post.objects.get
+		# post = get_object_or_404(Post)
+		# print(post)
+		context['comments'] = Comment.objects.filter(post=self.object).order_by('-date_posted')
+		return context
 		
 
 class PostCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
