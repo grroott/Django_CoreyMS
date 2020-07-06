@@ -15,9 +15,26 @@ from django.contrib.auth.decorators import login_required
 	
 @login_required
 def post_detail(request, pk):
+
+	object = Post.objects.get(id=pk)
+	comments = Comment.objects.filter(post=pk).order_by('-date_posted')
+
+	if request.method == 'POST':
+		comment_form = CommentForm(request.POST or None)
+		if comment_form.is_valid():
+			comment = request.POST.get('comment')
+			content = Comment.objects.create(post=object, user=request.user, comment=comment)
+			content.save()
+			messages.success(request, f'Your comment has been added!')
+			return HttpResponseRedirect(object.get_absolute_url())
+
+	else:
+		comment_form=CommentForm()
+
 	context = {
-	'object' : Post.objects.get(id=pk),
-	'comments':Comment.objects.filter(post=pk).order_by('-date_posted')
+	'object' : object,
+	'comments': comments,
+	'comment_form': comment_form
 	}
 	return render(request, 'blog/post_detail.html', context)
 
