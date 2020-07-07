@@ -29,7 +29,7 @@ def post_detail(request, pk):
 				comment_obj=Comment.objects.get(id=reply_id)
 			content = Comment.objects.create(post=object, user=request.user, comment=comment, reply=comment_obj)
 			content.save()
-			messages.success(request, f'Your comment has been added!')
+			messages.success(request, f'Your comment has been posted!')
 			return HttpResponseRedirect(object.get_absolute_url())
 
 	else:
