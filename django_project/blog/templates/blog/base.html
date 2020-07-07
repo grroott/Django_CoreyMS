@@ -53,6 +53,12 @@
                     },
                 });
             });
+            $('.reply-btn').click(function(){
+            	$(this).parent().parent().next('.comment-form').fadeToggle()
+            })
+            $('.view-reply-btn').click(function(){
+            	$(this).parent().parent().next().next('.comment-replies').fadeToggle()
+            })
         });
     </script>
 	

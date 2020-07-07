@@ -17,13 +17,17 @@ from django.contrib.auth.decorators import login_required
 def post_detail(request, pk):
 
 	object = Post.objects.get(id=pk)
-	comments = Comment.objects.filter(post=pk).order_by('-date_posted')
+	comments = Comment.objects.filter(post=pk, reply=None).order_by('-date_posted')
 
 	if request.method == 'POST':
 		comment_form = CommentForm(request.POST or None)
 		if comment_form.is_valid():
 			comment = request.POST.get('comment')
-			content = Comment.objects.create(post=object, user=request.user, comment=comment)
+			reply_id = request.POST.get('comment_id')
+			comment_obj=None
+			if reply_id:
+				comment_obj=Comment.objects.get(id=reply_id)
+			content = Comment.objects.create(post=object, user=request.user, comment=comment, reply=comment_obj)
 			content.save()
 			messages.success(request, f'Your comment has been added!')
 			return HttpResponseRedirect(object.get_absolute_url())

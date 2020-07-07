@@ -33,36 +33,74 @@
     </div>
   </article>
 
+<div class="comment-section">
   {% if comments.count == None or comments.count == 0 %}
     <h3>0 Comment</h3> 
   {% else %}
     <h3>{{ comments.count }} Comment{{ comments | pluralize }}</h3>
   {% endif %}
 
-  <form method="POST">
-    {% csrf_token %}
-    <fieldset class="form-group" id="exampleFormControlTextarea1" rows="3" >
-      {{ comment_form | crispy }}
-    </fieldset>
-    <div class="form-group">
-      <button class="btn btn-outline-info" value="Submit" type="submit">Comment</button>
-    </div>
-  </form>
-
-  
+  <div class="comment-form">
+    <form method="POST">
+      {% csrf_token %}
+      <fieldset class="form-group">
+        {{ comment_form | crispy }}
+      </fieldset>
+      <div class="form-group">
+        <button class="btn btn-outline-info" value="Submit" type="submit">Add comment</button>
+      </div>
+    </form>  
+  </div>
   
   {% for commentt in comments %}
     <article class="media content-section">
       <img class="rounded-circle article-img" src="{{ commentt.user.profile.image.url }}">
       <div class="media-body">
         <div class="article-metadata">
-          <a class="mr-2" href="{% url 'user-posts' commentt.user.username %}">{{ commentt.user.username }}</a>
+          <a class="mr-2" href="{% url 'user-posts' commentt.user.username %}">
+            <small>{{ commentt.user.username }}</small></a>
           <small class="text-muted">{{ commentt.date_posted|date:"F d, Y h:i A" }}</small>
         </div>
         <p class="article-content">{{ commentt.comment }}</p>
+        <button type="button" name="button" class="reply-btn btn btn-outline-info mt-2 btn-sm">Reply</button>
+        {% if commentt.replies.all.count > 0 %}
+          <button type="button" name="button" class="view-reply-btn btn btn-outline-info mt-2 ml-3 btn-sm">{{ commentt.replies.all.count }} Replies</button>
+        {% endif %}
       </div>
+
     </article>
+    
+    <div class="comment-form" style="display: none;">
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="comment_id" value="{{commentt.id}}">
+        <fieldset class="form-group">
+          {{ comment_form | crispy }}
+        </fieldset>
+        <div class="form-group">
+          <button class="btn btn-outline-info" value="Submit" type="submit">Add reply</button>
+        </div>
+      </form>
+    </div>
+    <div class="comment-replies" style="display: none;">
+      {% for reply in commentt.replies.all %}
+        <article class="media content-section ml-5">
+          <img class="rounded-circle article-img" src="{{ reply.user.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{% url 'user-posts' reply.user.username %}">{{ reply.user.username }}</a>
+              <small class="text-muted">{{ reply.date_posted|date:"F d, Y h:i A" }}</small>
+            </div>
+            <p class="article-content"><small>{{ reply.comment }}</small></p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
   {% endfor %}
+</div>
 
 
 {% endblock content %}
+
+
