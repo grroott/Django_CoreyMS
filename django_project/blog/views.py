@@ -187,8 +187,10 @@ def bookmark_post(request, pk):
 	post = get_object_or_404(Post, id=pk)
 	if post.bookmark.filter(id=request.user.id).exists():
 		post.bookmark.remove(request.user)
+		messages.success(request, f'Removed from bookmark successfully!')
 	else:
 		post.bookmark.add(request.user)
+		messages.success(request, f'Added to bookmark successfully!')
 	return HttpResponseRedirect(post.get_absolute_url())
 
 def my_bookmarks(request):
