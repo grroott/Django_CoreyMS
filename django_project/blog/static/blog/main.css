@@ -13,11 +13,11 @@ ul {
 }
 
 .bg-steel {
-  background-color: #5f788a;
+  background-color: #181a19;
 }
 
 .site-header .navbar-nav .nav-link {
-  color: #cbd5db;
+  color: #5bc0de;
 }
 
 .site-header .navbar-nav .nav-link:hover {
@@ -86,3 +86,8 @@ a.article-title:hover {
 .highlight {
   background-color: rgba(94, 151, 242, 0.5);
 }
+
+.logo {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
